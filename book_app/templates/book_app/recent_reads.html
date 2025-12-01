@@ -1,0 +1,16 @@
+<h1>Recently Read Books</h1>
+{{ recently_read_books.book_list }}
+<table>
+    <tr>
+        <th>User Name</th>
+        <th>Book Name</th>
+        <th>Author Name</th>
+    </tr>
+{% for item in book_list %}
+<tr>
+    <td> {{item.user_name}} </td>
+    <td> {{item.book_name}} </td>
+    <td> {{item.author_name}} </td>
+</tr>
+{% endfor %}
+</table>
