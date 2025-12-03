@@ -1,0 +1,11 @@
+
+<h1> ({{user_name}}) </h1>
+{% if current_read.book_name is not None %}
+<p> is currently reading {{current_read.book_name}}</p>
+{% else %}
+<p>{{user_name}} is not reading anything at the moment</p>
+{% endif %}
+
+{% for book in book_list %}
+<li> {{book.book_name}} </li>
+{% endfor %}

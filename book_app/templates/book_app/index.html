@@ -1,9 +1,8 @@
 
-
+<h1>Welcome {{user.username}}</h1>
 <form method="post">
 {% csrf_token %}
 <fieldset>
-<input name="user_name" default="Darwin D Dragon"/>
 <label>Book Name</label>
 <input name="book_name"/>
 <label>Author Name</label>

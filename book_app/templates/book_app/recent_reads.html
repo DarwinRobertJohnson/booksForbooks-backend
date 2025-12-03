@@ -1,3 +1,11 @@
+
+
+<form method="post" action="{% url 'sign_out' %}">
+    {% csrf_token %}
+    <fieldset>
+        <input type="submit" value="log-out"/>
+    </fieldset>
+</form>
 <h1>Recently Read Books</h1>
 {{ recently_read_books.book_list }}
 <table>
@@ -8,7 +16,11 @@
     </tr>
 {% for item in book_list %}
 <tr>
-    <td> {{item.user_name}} </td>
+    {% if item.user_name %}
+    <td> <a href="{% url 'other-user-page' item.user_name %}">{{item.user_name}}</a> </td>
+    {% else %}
+    <td> <a href="{% url 'other-user-page' 'Darwin J Dragon' %}">{{item.user_name}} else block</a> </td>
+    {% endif %}
     <td> {{item.book_name}} </td>
     <td> {{item.author_name}} </td>
 </tr>
