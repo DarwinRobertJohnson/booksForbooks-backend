@@ -1,11 +1,17 @@
 
 
-<form method="post" action="{% url 'sign_out' %}">
-    {% csrf_token %}
-    <fieldset>
-        <input type="submit" value="log-out"/>
-    </fieldset>
-</form>
+{% if not user.is_authenticated %}
+<button>
+    <a href="{% url 'sign in' %}">Log in</a>
+</button>
+{% else %}
+<button>
+    <a href="{% url 'user-dash-board' %}">Dashboard</a>
+</button>
+{% endif %}
+<button> 
+    <a href="{% url 'sign_out' %}">Log Out</a>
+</button>
 <h1>Recently Read Books</h1>
 {{ recently_read_books.book_list }}
 <table>
