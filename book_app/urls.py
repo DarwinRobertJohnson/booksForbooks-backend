@@ -9,5 +9,6 @@ urlpatterns = [
         path("sign-in", views.sign_in, name="sign in"),
         path('sign-out', views.sign_out, name="sign_out"),
         path("sign-up", views.sign_up, name="sign_up"),
-        path("delete/<int:id>", views.delete, name="delete")
+        path("delete/<int:id>", views.delete, name="delete"),
+        path("api/", views.recently_read_books.as_view(), name="recently-read-books")
 ]

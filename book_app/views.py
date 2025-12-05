@@ -4,27 +4,23 @@ from .models import BookEntry
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from . import services
+from rest_framework import generics
+from .serializers import BookEntrySerializer
 # Create your views here.
 @login_required(login_url='sign in')
 def user_home(request):
     if request.method == "GET":
-        user_read_books = BookEntry.objects.filter(user_name= request.user.username)
+        user_read_books = services.get_user_read_books(request)
         return render(request, "book_app/index.html", {'self_data':user_read_books})
     if request.method == "POST":
-        book_entry = BookEntry(
-            user_name = request.user, 
-            book_name = request.POST["book_name"], 
-            author_name = request.POST["author_name"], 
-            book_status = request.POST["book_status"]
-            )
-        book_entry.save()
+        services.save_book_entry(request)
         return redirect("index")
 
 def sign_in_post(request):
     user = authenticate(username=request.POST["user_name"], password=request.POST["password"])
     if user is not None:
         login(request, user)
-        print("correct authentication")
         return redirect("user-dash-board")
     else:
         return redirect("sign in")
@@ -52,8 +48,7 @@ def sign_up(request):
 
 @login_required(login_url='sign in')
 def delete(request, id):
-    if BookEntry.objects.get(pk=id) is not None:
-        BookEntry.objects.get(pk=id).delete()
+    services.delete_book_entry(request, id)
     return redirect("index")
 
 def recent_reads(request):
@@ -62,7 +57,17 @@ def recent_reads(request):
         return render(request, "book_app/recent_reads.html",recently_read_books)
         
 def user_others(request, user_name):
-    user_read_books = BookEntry.objects.filter(user_name= user_name)
-    currently_reading = BookEntry.objects.filter(book_status= True)
-    context={'user_name':user_name, 'book_list':user_read_books,'current_read':currently_reading[0]}
+    user_read_books = services.get_other_users_books(user_name)
+    currently_reading = services.get_currently_reading_book(user_name)
+    print(currently_reading)
+    if currently_reading.exists():
+        context={'user_name':user_name, 'book_list':user_read_books,'current_read':currently_reading[0].book_name}
+    else:
+        context={'user_name':user_name, 'book_list':user_read_books,'current_read':"-"}
     return render(request, "book_app/user_others.html",context)
+
+
+class recently_read_books(generics.ListAPIView):
+    queryset = BookEntry.objects.values('user_name','book_name','author_name')
+    serializer_class = BookEntrySerializer
+    http_method_names = ['get']
