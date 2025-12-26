@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1e3jz2$^0&ij6h0ct*^@+e2ca-s^0wu-9%p*axbh7s*i@ws&kn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'corsheaders'
 ]
 
 REST_FRAMEWORK = {
@@ -46,11 +47,21 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+    'rest_framework.authentication.SessionAuthentication',
     ],
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+]
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+]
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,4 +143,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = False   # only for local HTTP
+
+CSRF_COOKIE_SAMESITE = None 
+CSRF_COOKIE_SECURE = False
