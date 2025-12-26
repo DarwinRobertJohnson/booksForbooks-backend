@@ -1,0 +1,37 @@
+
+{% if not user.is_authenticated %}
+<button>
+    <a href="{% url 'sign in' %}">Log in</a>
+</button>
+{% else %}
+<button>
+    <a href="{% url 'user-dash-board' %}">Dashboard</a>
+</button>
+{% endif %}
+<button> 
+    <a href="{% url 'sign_out' %}">Log Out</a>
+</button>
+
+
+<h1>Welcome {{user.username}}</h1>
+<form method="post">
+{% csrf_token %}
+<fieldset>
+<label>Book Name</label>
+<input name="book_name"/>
+<label>Author Name</label>
+<input name="author_name"/>
+<select id="bookStatusDropDown" name="book_status">
+    <option value=True>Reading</option>
+    <option value=False selected>Finished</option>
+</select>
+<input type="submit" value="Save">
+</fieldset>
+</form>
+
+{% for book in self_data %}
+    <li>
+        {{book.book_name}} <button class=".btn"><a href="{% url 'delete' book.id %}"> Delete </a></button> 
+    </li> 
+    
+{% endfor %}

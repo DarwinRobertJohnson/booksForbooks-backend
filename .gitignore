@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Django stuff
+*.log
+local_settings.py
+db.sqlite3
+media/
+
+# Static files (usually generated)
+staticfiles/
+
+# Environment variables
+.env
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Test / coverage
+.coverage
+htmlcov
